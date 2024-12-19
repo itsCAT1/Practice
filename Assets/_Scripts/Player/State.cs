@@ -133,3 +133,30 @@ public class FallState : IState
 
     }
 }
+
+public class WallSlidingState : IState
+{
+    private PlayerController controller;
+    private float wallSlideSpeed = 2f; 
+
+    public WallSlidingState(PlayerController player)
+    {
+        controller = player;
+    }
+
+    public void Enter()
+    {
+        controller.PlayWallJump(); 
+    }
+
+    public void Execute()
+    {
+        controller.rigid.velocity = new Vector2(controller.rigid.velocity.x, Mathf.Clamp(controller.rigid.velocity.y, -wallSlideSpeed, float.MaxValue));
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exit Wall Sliding");
+    }
+}
+

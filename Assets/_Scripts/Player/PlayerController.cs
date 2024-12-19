@@ -11,9 +11,17 @@ public class PlayerController : MonoBehaviour
     public float inputHorizontal;
     public float moveSpeed;
 
-    bool onGround = false;
     public float jumpForce;
     bool hasDoubleJump;
+
+    public LayerMask wallLayer;
+    public Transform wallCheckPos;
+    public LayerMask groundLayer;
+    public Transform groundCheckPos;
+    public float radius;
+
+    bool IsGround() => Physics2D.Raycast(groundCheckPos.position, -transform.up, 0.1f, groundLayer);
+    bool IsWall() => Physics2D.OverlapCircle(wallCheckPos.position, radius, wallLayer);
 
     void Awake()
     {
@@ -28,13 +36,21 @@ public class PlayerController : MonoBehaviour
     {
         CheckInput();
         FlipCharactor();
+
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(wallCheckPos.position, radius);
+        Gizmos.DrawLine(groundCheckPos.position, groundCheckPos.position + new Vector3(0,-radius,0));
     }
 
     void CheckInput()
     {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
-
-        if (onGround)
+        
+        if (IsGround())
         {
             if (inputHorizontal != 0)
             {
@@ -46,13 +62,20 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        else
+        {
+            if (IsWall() && !IsGround() && inputHorizontal != 0)
+            {
+                _stateManager.ChangeState(new WallSlidingState(this));
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (onGround)
+            if (IsGround())
             {
                 _stateManager.ChangeState(new JumpingState(this));
                 hasDoubleJump = false;
-                onGround = false;
             }
             else if (!hasDoubleJump)
             {
@@ -68,14 +91,6 @@ public class PlayerController : MonoBehaviour
 
         if (inputHorizontal > 0) this.transform.localScale = new Vector3(1, 1, 1);
         else if (inputHorizontal < 0) this.transform.localScale = new Vector3(-1, 1, 1);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            onGround = true;
-        }
     }
 
     public void PerformMoving()
@@ -111,5 +126,10 @@ public class PlayerController : MonoBehaviour
     public void PlayFall()
     {
         animator.Play("Fall");
+    }
+
+    public void PlayWallJump()
+    {
+        animator.Play("WallJump");
     }
 }
