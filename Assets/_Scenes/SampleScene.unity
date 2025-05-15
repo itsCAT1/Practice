@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 550645424}
   - component: {fileID: 550645423}
   - component: {fileID: 550645427}
-  - component: {fileID: 550645426}
+  - component: {fileID: 550645430}
   - component: {fileID: 550645429}
   - component: {fileID: 550645428}
   m_Layer: 0
@@ -247,7 +247,7 @@ Animator:
   m_GameObject: {fileID: 550645422}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4f1b1a21a812d744a8596415f7079576, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6bb9a1ffb8cabab498a08f3babe59336, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -328,18 +328,6 @@ Transform:
   - {fileID: 1925460001}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &550645426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 550645422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02d2b2ddc29a01843aafa6cc8439ec25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &550645427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,23 +337,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 550645422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42b7eee344d45ae4b9831003436e44b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 744acafdb6d9e4c44ad06013b99a72e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateManager: {fileID: 550645426}
-  rigid: {fileID: 0}
-  inputHorizontal: 0
-  moveSpeed: 5
-  jumpForce: 5
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  wallCheckPos: {fileID: 933569897}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  groundCheckPos: {fileID: 1925460001}
-  radius: 0.1
+  stateMachine: {fileID: 550645430}
+  speedMove: 5
+  animator: {fileID: 0}
 --- !u!61 &550645428
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -375,7 +352,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 550645422}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0f042cf3890d0ea4ca58e8bb2240b01c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -438,6 +415,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &550645430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550645422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ad8cb55348d74e9a08b25399f31d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &933569896
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1359938578
 BoxCollider2D:
   m_ObjectHideFlags: 0

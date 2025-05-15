@@ -1,162 +1,85 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class IdleState : IState
 {
     PlayerController controller;
-    public IdleState(PlayerController player)
+    public IdleState(PlayerController control)
     {
-        controller = player;
+        controller = control;
     }
 
     public void Enter()
     {
-        controller.PlayIdle();
+        controller.animator.SetBool("isMoving", false);
+        Debug.Log("idle");
     }
 
     public void Execute()
     {
 
+        
     }
 
     public void Exit()
     {
-
+        
     }
 }
 
-public class MovingState : IState
+public class RunState : IState
 {
     PlayerController controller;
-    public MovingState(PlayerController player)
+    public RunState(PlayerController control)
     {
-        controller = player;
+        controller = control;
     }
 
     public void Enter()
     {
-        controller.PlayMove();
+        controller.animator.SetBool("isMoving", true);
+        Debug.Log("run");
     }
 
     public void Execute()
     {
-        controller.PerformMoving();
+        var inputX = Input.GetAxisRaw("Horizontal");
+
+        var controllerPos = controller.transform.position;
+        controllerPos.x += inputX * controller.speedMove * Time.deltaTime;
+        controller.transform.position = controllerPos;
+
+        if (inputX < 0) controller.transform.localScale = new Vector3(-1,1,1);
+        if (inputX > 0) controller.transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void Exit()
     {
-
+        
     }
 }
 
-
-public class JumpingState : IState
+public class AttackState : IState
 {
     PlayerController controller;
-    public JumpingState(PlayerController player)
+    public AttackState(PlayerController control)
     {
-        controller = player;
+        controller = control;
     }
 
     public void Enter()
     {
-        controller.PlayJump();
-        controller.PerformJumping();
+        Debug.Log("attack");
     }
 
     public void Execute()
     {
-        controller.PerformMoving();
-        if (controller.rigid.velocity.y < 0)
-        {
-            controller._stateManager.ChangeState(new FallState(controller));
-        }
+
     }
 
     public void Exit()
     {
-
+        
     }
 }
-
-public class DoubleJumpingState : IState
-{
-    PlayerController controller;
-    public DoubleJumpingState(PlayerController player)
-    {
-        controller = player;
-    }
-
-    public void Enter()
-    {
-        controller.PlayDoubleJump();
-        controller.PerformJumping();
-    }
-
-    public void Execute()
-    {
-        controller.PerformMoving();
-        if (controller.rigid.velocity.y < 0)
-        {
-            controller._stateManager.ChangeState(new FallState(controller));
-        }
-    }
-
-    public void Exit()
-    {
-
-    }
-}
-
-public class FallState : IState
-{
-    PlayerController controller;
-
-    public FallState(PlayerController player)
-    {
-        controller = player;
-    }
-
-    public void Enter()
-    {
-        controller.PlayFall();
-    }
-
-    public void Execute()
-    {
-        controller.PerformMoving();
-    }
-
-    public void Exit()
-    {
-
-    }
-}
-
-public class WallSlidingState : IState
-{
-    private PlayerController controller;
-    private float wallSlideSpeed = 2f; 
-
-    public WallSlidingState(PlayerController player)
-    {
-        controller = player;
-    }
-
-    public void Enter()
-    {
-        controller.PlayWallJump(); 
-    }
-
-    public void Execute()
-    {
-        controller.rigid.velocity = new Vector2(controller.rigid.velocity.x, Mathf.Clamp(controller.rigid.velocity.y, -wallSlideSpeed, float.MaxValue));
-    }
-
-    public void Exit()
-    {
-        Debug.Log("Exit Wall Sliding");
-    }
-}
-
