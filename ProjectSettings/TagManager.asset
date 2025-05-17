@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - DuckFly
+  - Animal
   layers:
   - Default
   - TransparentFX
