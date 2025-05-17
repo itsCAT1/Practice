@@ -12,8 +12,8 @@ public class BulletMovement : MonoBehaviour
         this.transform.position += this.transform.right * speed * Time.deltaTime;
     }
 
+    
     Coroutine _deactiveWait = null;
-
 
     private void OnEnable()
     {
@@ -22,7 +22,7 @@ public class BulletMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        if(_deactiveWait != null)
+        if( _deactiveWait != null)
         {
             StopCoroutine(_deactiveWait);
             _deactiveWait = null;
@@ -32,7 +32,7 @@ public class BulletMovement : MonoBehaviour
     IEnumerator DeactiveAfterTime()
     {
         yield return new WaitForSeconds(2);
-
+        
         this.gameObject.SetActive(false);
     }
 }
