@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,14 +7,11 @@ public class PlayerController : MonoBehaviour
     public float speedMove;
     public Rigidbody2D rigid;
 
-    private StateMachine stateMachine;
-    private IdleState idleState;
-    private RunState runState;
-    private AttackState attackState;
-
     private PlayerInputHandler inputHandler;
     private BulletSpawner bulletSpawner;
     private PlayerAnimation playerAnimation;
+
+    public StateMachine stateMachine;
 
     void Start()
     {
@@ -22,34 +21,43 @@ public class PlayerController : MonoBehaviour
 
         rigid = GetComponent<Rigidbody2D>();
 
-        stateMachine = GetComponent<StateMachine>();
-        idleState = new IdleState(this, playerAnimation);
-        runState = new RunState(this, playerAnimation);
-        attackState = new AttackState(this);
-
-        stateMachine.ChangeState(idleState);
+        stateMachine = new StateMachine();
+        stateMachine.InitStates(new List<State>
+        {
+            new IdleState(this, playerAnimation),
+            new WalkState(this, playerAnimation),
+            new AttackState(),
+        });
     }
 
-    void Update()
+
+        void Update()
     {
+        stateMachine.Tick();
         HandleInput();
+    }
+
+    private void FixedUpdate()
+    {
+        stateMachine.FixedTick();
     }
 
     private void HandleInput()
     {
         float inputX = inputHandler.GetHorizontalInput();
 
-        if (inputHandler.IsAttackPressed())
+        if (inputX == 0)
         {
-            stateMachine.ChangeState(attackState);
-        }
-        else if (inputX == 0)
-        {
-            stateMachine.ChangeState(idleState);
+            stateMachine.ChangeState<IdleState>();
         }
         else
         {
-            stateMachine.ChangeState(runState);
+            stateMachine.ChangeState<WalkState>();
+        }
+
+        if (inputHandler.IsAttackPressed())
+        {
+            stateMachine.ChangeState<AttackState>();
         }
 
         if (inputHandler.IsShootPressed())

@@ -2,35 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachine : MonoBehaviour
+public class StateMachine
 {
-    public IState currentState;
+    public State CurrentState { get; private set; }
 
-    public void ChangeState(IState state)
+    public List<State> States { get; set; }
+
+    public void InitStates(List<State> states)
     {
-        if(currentState != null && currentState == state)
-        {
-            return;
-        }
+        States = states;
+        foreach (var state in States) state.StateMachine = this;
+    }
 
-        if (currentState != null)
+    public void ChangeState<T>(object data = null) where T : State
+    {
+        if (States != null && States.Count > 0)
         {
-            currentState.Exit();
-        }
-
-        currentState = state;
-
-        if (currentState != null)
-        {
-            currentState.Enter();
+            foreach (var state in States)
+            {
+                if (state is T)
+                {
+                    ChangeState(state, data);
+                    return;
+                }
+            }
+            Debug.LogWarning($"Cannot find {typeof(T)}");
         }
     }
 
-    void Update()
+    void ChangeState(State state, object data = null)
     {
-        if (currentState != null)
-        {
-            currentState.Execute();
-        }
+        if (state == CurrentState) return;
+
+        var oldState = CurrentState;
+        CurrentState = state;
+        oldState?.StateExit(state);
+        state?.StateEnter(oldState, data);
     }
+
+    public void Tick() => CurrentState?.StateTick();
+
+    public void FixedTick() => CurrentState?.StateFixedTick();
 }

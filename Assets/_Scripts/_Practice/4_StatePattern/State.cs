@@ -2,119 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : IState
+public class State
 {
-    private PlayerController controller;
-    private PlayerAnimation animation;
+    public StateMachine StateMachine { get; set; }
 
-    public IdleState(PlayerController control, PlayerAnimation anim)
+    public void ChangeState<T>() where T : State
     {
-        controller = control;
-        animation = anim;
+        StateMachine.ChangeState<T>();
     }
 
-    public void Enter()
+    public void StateEnter(State from, object data)
     {
-        animation.SetMoving(false);
-        //Debug.Log("idle");
+        OnStateEnter(from, data);
     }
 
-    public void Execute()
+    public void StateTick()
     {
-
-        
+        OnStateUpdate();
     }
 
-    public void Exit()
+    public void StateFixedTick()
     {
-        
-    }
-}
-
-public class RunState : IState
-{
-    private PlayerController controller;
-    private PlayerAnimation animation;
-
-    public RunState(PlayerController control, PlayerAnimation anim)
-    {
-        controller = control;
-        animation = anim;
-
-        
+        OnStateFixedUpdate();
     }
 
-    public void Enter()
+    public void StateExit(State to)
     {
-        animation.SetMoving(true);
+        OnStateExit(to);
     }
 
-    public void Execute()
+    protected virtual void OnStateEnter(State from, object data)
     {
-        float inputX = controller.GetHorizontalInput();
-
-        //MoveByTranform();
-        //MoveByVelocity();
-        //MoveByTranslate();
-        MoveByPush();
-
-        if (inputX < 0) controller.transform.localScale = new Vector3(-1, 1, 1);
-        if (inputX > 0) controller.transform.localScale = new Vector3(1, 1, 1);
     }
 
-    public void Exit() { }
-
-
-    public void MoveByTranform()
+    protected virtual void OnStateUpdate()
     {
-        float inputX = controller.GetHorizontalInput();
-
-        var position = controller.transform.position;
-        position.x += inputX * controller.speedMove * Time.deltaTime;
-        controller.transform.position = position;
     }
 
-    public void MoveByVelocity()
+    protected virtual void OnStateFixedUpdate()
     {
-        float inputX = controller.GetHorizontalInput();
-        controller.rigid.velocity = new Vector2(controller.speedMove * inputX, controller.rigid.velocity.y);
     }
 
-    public void MoveByTranslate()
+    protected virtual void OnStateExit(State to)
     {
-        float inputX = controller.GetHorizontalInput();
-        controller.transform.Translate(controller.speedMove * inputX * Time.deltaTime, 0, 0);
-    }
-
-    public void MoveByPush()
-    {
-        float inputX = controller.GetHorizontalInput();
-        var targetPos = (Vector2)controller.transform.position + inputX * Vector2.right;
-        controller.transform.position = Vector2.MoveTowards(controller.transform.position, targetPos, controller.speedMove * Time.deltaTime);
-    }
-}
-
-
-public class AttackState : IState
-{
-    PlayerController controller;
-    public AttackState(PlayerController control)
-    {
-        controller = control;
-    }
-
-    public void Enter()
-    {
-        //Debug.Log("attack");
-    }
-
-    public void Execute()
-    {
-
-    }
-
-    public void Exit()
-    {
-        
     }
 }

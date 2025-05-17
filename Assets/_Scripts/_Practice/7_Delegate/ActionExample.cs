@@ -7,6 +7,8 @@ public class ActionExample : MonoBehaviour
 {
     public Action<string> say;
 
+
+
     void Start()
     {
         say = Hello;
