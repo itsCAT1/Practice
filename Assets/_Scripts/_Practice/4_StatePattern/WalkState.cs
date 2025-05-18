@@ -28,7 +28,6 @@ public class WalkState : State
 
     protected override void OnStateFixedUpdate()
     {
-        Debug.Log("walk");
         MoveByTranform();
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -12,6 +13,11 @@ public class PlayerController : MonoBehaviour
     private PlayerAnimation playerAnimation;
 
     public StateMachine stateMachine;
+
+    PlayerMoveByDotween moveByDotween;
+
+    public Action action = null;
+
 
     void Start()
     {
@@ -28,6 +34,11 @@ public class PlayerController : MonoBehaviour
             new WalkState(this, playerAnimation),
             new AttackState(),
         });
+
+        moveByDotween = GetComponent<PlayerMoveByDotween>();
+
+        action = () => { bulletSpawner.Shoot(); };
+        action += () => { Debug.Log("jump"); };
     }
 
 
@@ -70,4 +81,5 @@ public class PlayerController : MonoBehaviour
     {
         return inputHandler.GetHorizontalInput();
     }
+
 }

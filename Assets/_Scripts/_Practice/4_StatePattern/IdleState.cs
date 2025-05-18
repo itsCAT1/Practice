@@ -21,7 +21,7 @@ public class IdleState : State
     protected override void OnStateUpdate()
     {
 
-        Debug.Log("idle");
+        
     }
 
     protected override void OnStateFixedUpdate()
