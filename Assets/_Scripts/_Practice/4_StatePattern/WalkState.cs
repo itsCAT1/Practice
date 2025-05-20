@@ -33,7 +33,7 @@ public class WalkState : State
 
     public void MoveByTranform()
     {
-        float inputX = controller.GetHorizontalInput();
+        float inputX = controller.inputX;
 
         var position = controller.transform.position;
         position.x += inputX * controller.speedMove * Time.deltaTime;
@@ -42,7 +42,7 @@ public class WalkState : State
 
     void FlipCharacter()
     {
-        float inputX = controller.GetHorizontalInput();
+        float inputX = controller.inputX;
         if (inputX < 0) controller.transform.localScale = new Vector3(-1, 1, 1);
         if (inputX > 0) controller.transform.localScale = new Vector3(1, 1, 1);
     }

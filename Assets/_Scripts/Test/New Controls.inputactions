@@ -7,17 +7,26 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "fc8603df-dd75-4583-9f73-41611a2bef8f",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
                     "type": "Button",
                     "id": "7bcc5538-9ffc-4a55-b6d0-7edec4844e49",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "c6f029b2-df2e-457a-ae9a-4b25f5a7959d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -28,7 +37,7 @@
                 {
                     "name": "",
                     "id": "b608816a-e3c3-4bdb-a8da-5597179a4ba0",
-                    "path": "",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -37,9 +46,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "2D Vector",
+                    "name": "1D Axis",
                     "id": "e052c217-7f8b-4fe9-b3e0-28f9e307888c",
-                    "path": "2DVector",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -48,9 +57,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
+                    "name": "Negative",
                     "id": "e3daed32-c75c-4dad-9b69-3da625234302",
-                    "path": "W",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -59,9 +68,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "down",
+                    "name": "Positive",
                     "id": "3114e309-1efd-42b5-ac2b-b367225e93f9",
-                    "path": "S",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -70,29 +79,30 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "left",
-                    "id": "5928ab4c-09c5-4736-a61a-65c244ac9bbc",
-                    "path": "A",
+                    "name": "",
+                    "id": "bda6aa41-af49-403b-83a5-e4b51009cf3e",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Fire",
                     "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "787c72f1-fa54-4974-a4b3-864c91786c2c",
-                    "path": "D",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 }
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>/{Back}",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }

@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputHandler
 {
-    public float GetHorizontalInput()
-    {
-        return Input.GetAxisRaw("Horizontal");
-    }
+    
 
     public bool IsAttackPressed()
     {

@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,14 +19,24 @@ public class PlayerController : MonoBehaviour
 
     public Action action = null;
 
+    public float inputX;
+
+    public InputActionReference move;
+    public InputActionReference fire;
+
+    private void Awake()
+    {
+        inputHandler = new PlayerInputHandler();
+
+        rigid = GetComponent<Rigidbody2D>();
+    }
 
     void Start()
     {
-        inputHandler = new PlayerInputHandler();
         bulletSpawner = new BulletSpawner(transform);
         playerAnimation = new PlayerAnimation(GetComponent<Animator>());
 
-        rigid = GetComponent<Rigidbody2D>();
+        
 
         stateMachine = new StateMachine();
         stateMachine.InitStates(new List<State>
@@ -42,10 +53,20 @@ public class PlayerController : MonoBehaviour
     }
 
 
-        void Update()
+    void Update()
     {
         stateMachine.Tick();
         HandleInput();
+    }
+
+    private void OnEnable()
+    {
+        fire.action.started += Fire;
+    }
+
+    private void OnDisable()
+    {
+        fire.action.started -= Fire;
     }
 
     private void FixedUpdate()
@@ -55,7 +76,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInput()
     {
-        float inputX = inputHandler.GetHorizontalInput();
+        inputX = move.action.ReadValue<float>();
+
+        Debug.Log(inputX);
 
         if (inputX == 0)
         {
@@ -66,20 +89,16 @@ public class PlayerController : MonoBehaviour
             stateMachine.ChangeState<WalkState>();
         }
 
-        if (inputHandler.IsAttackPressed())
+        /*if (inputHandler.IsAttackPressed())
         {
             stateMachine.ChangeState<AttackState>();
-        }
-
-        if (inputHandler.IsShootPressed())
-        {
-            bulletSpawner.Shoot();
-        }
+        }*/
     }
 
-    public float GetHorizontalInput()
+    private void Fire(InputAction.CallbackContext obj)
     {
-        return inputHandler.GetHorizontalInput();
+        Debug.Log("fire");
+        bulletSpawner.Shoot();
     }
 
 }
